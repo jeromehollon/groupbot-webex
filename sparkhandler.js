@@ -49,7 +49,7 @@ module.exports.messages = function(body) {
     if(command && 'function' === typeof(sparkController[command])) {
       sparkController[command](message, directive);
     } else {
-      sparkController.unknown(message, command + " " + (directive || ""));
+      sparkController.unknown(message, (command || "") + " " + (directive || ""));
     }
   });
 };
