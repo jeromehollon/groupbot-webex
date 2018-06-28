@@ -1,9 +1,9 @@
-var spark = require('ciscospark/env');
-var fs = require('fs');
+const spark = require('ciscospark/env');
+const fs = require('fs');
 
 // data
-var rooms = {};
-var actions = {};
+let rooms = {};
+let actions = {};
 
 // Read the cache
 fs.readFile('./cache.db', (err, data) => {
@@ -25,7 +25,7 @@ actions.addRomm = function (roomId) {
 actions.help = function (caller) {
   // Print help to the room I'm in
 
-  var message = {};
+  let message = {};
   message.roomId = caller.roomId;
   message.markdown = "```\n======================================================================\n";
   message.markdown += "I am groupbot. I maintain groups. To talk to me say '@Groupbot command'\n"
@@ -48,7 +48,7 @@ actions.help = function (caller) {
 actions.unknown = function (source) {
   // tell them I didn't understand
 
-  var message = {};
+  let message = {};
   message.roomId = source.roomId;
   message.text = "Sorry, I didn't understand '" + source.text + "'";
   spark.messages.create(message);
@@ -61,7 +61,7 @@ actions.unknown = function (source) {
 // ------------------------------------------------
 actions.create = function (source, groupname) {
   // create a group
-  var token = getGroupname(groupname);
+  let token = getGroupname(groupname);
 
   if (token == null) {
     invalidGroupname(source, groupname);
@@ -69,7 +69,7 @@ actions.create = function (source, groupname) {
   }
 
   if (rooms[source.roomId].groups[token]) {
-    var message = {
+    let message = {
       roomId: source.roomId,
       text: "Group " + token + " has already been created. It contains " + rooms[source.roomId].groups[token].people.length + " people"
     };
@@ -80,7 +80,7 @@ actions.create = function (source, groupname) {
 
   rooms[source.roomId].groups[token] = {people: {}}
 
-  var message = {};
+  let message = {};
   message.roomId = source.roomId;
   message.text = "Created group '" + token + "'";
   spark.messages.create(message);
@@ -94,7 +94,7 @@ actions.create = function (source, groupname) {
 // ------------------------------------------------
 
 actions['delete'] = function (source, input) {
-  var group = getGroupname(input);
+  let group = getGroupname(input);
 
   if (token == null) {
     invalidGroupname(source, input);
@@ -102,7 +102,7 @@ actions['delete'] = function (source, input) {
   }
 
   if (rooms[source.roomId].groups[group] == null) {
-    var message = {
+    let message = {
       roomId: source.roomId,
       text: "Could not find a group named '" + group + "' for this room."
     };
@@ -118,7 +118,7 @@ actions['delete'] = function (source, input) {
 // Syn/Ack
 // ------------------------------------------------
 actions.hello = function (source) {
-  var message = {};
+  let message = {};
   message.roomId = source.roomId;
   message.text = "Yes?";
   spark.messages.create(message);
@@ -129,7 +129,7 @@ actions.hello = function (source) {
 // Adds member(s) to a group
 // -------------------------------------------------
 actions.groupadd = function (source, input) {
-  var group = getGroupname(input);
+  let group = getGroupname(input);
 
   if (group == null) {
     invalidGroupname(source, input);
@@ -137,7 +137,7 @@ actions.groupadd = function (source, input) {
   }
 
   if (rooms[source.roomId].groups[group] == null) {
-    var message = {
+    let message = {
       roomId: source.roomId,
       text: "Could not find a group named '" + group + "' for this room."
     };
@@ -146,7 +146,7 @@ actions.groupadd = function (source, input) {
   }
 
   if (source.mentionedPeople == null || source.mentionedPeople.length < 2) {
-    var message = {
+    let message = {
       roomId: source.roomId,
       text: "Could not identify any people in your message"
     };
@@ -155,10 +155,10 @@ actions.groupadd = function (source, input) {
   }
 
   // got a good request
-  for (var i = 1; i < source.mentionedPeople.length; i++) {
+  for (let i = 1; i < source.mentionedPeople.length; i++) {
     // see if we actually need to add them
     if (rooms[source.roomId].groups[group].people[source.mentionedPeople[i]] == null) {
-      var person = source.mentionedPeople[i];
+      let person = source.mentionedPeople[i];
       spark.people.get(person).then(function (p) {
         rooms[source.roomId].groups[group].people[p.id] = p;
         save();
@@ -172,7 +172,7 @@ actions.groupadd = function (source, input) {
 // List membership of a group
 // --------------------------------------------------
 actions.grouplist = function (source, input) {
-  var group = getGroupname(input);
+  let group = getGroupname(input);
 
   if (group == null) {
     invalidGroupname(source, input);
@@ -180,7 +180,7 @@ actions.grouplist = function (source, input) {
   }
 
   if (rooms[source.roomId].groups[group] == null) {
-    var message = {
+    let message = {
       roomId: source.roomId,
       text: "Could not find a group named '" + group + "' for this room."
     };
@@ -188,13 +188,13 @@ actions.grouplist = function (source, input) {
     return;
   }
 
-  var message = {};
+  let message = {};
   message.roomId = source.roomId;
   message.markdown = "Group '" + group + "' contains: ";
 
-  for (var property in rooms[source.roomId].groups[group].people) {
+  for (let property in rooms[source.roomId].groups[group].people) {
     if (rooms[source.roomId].groups[group].people.hasOwnProperty(property)) {
-      var person = rooms[source.roomId].groups[group].people[property];
+      let person = rooms[source.roomId].groups[group].people[property];
       message.markdown += person.displayName + " ";
     }
   }
@@ -207,7 +207,7 @@ actions.grouplist = function (source, input) {
 // Delete member(s) from a group
 // ------------------------------------------------
 actions.groupdel = function (source, input) {
-  var group = getGroupname(input);
+  let group = getGroupname(input);
 
   if (group == null) {
     invalidGroupname(source, input);
@@ -215,7 +215,7 @@ actions.groupdel = function (source, input) {
   }
 
   if (rooms[source.roomId].groups[group] == null) {
-    var message = {
+    let message = {
       roomId: source.roomId,
       text: "Could not find a group named '" + group + "' for this room."
     };
@@ -224,7 +224,7 @@ actions.groupdel = function (source, input) {
   }
 
   // got a good request
-  for (var i = 1; i < source.mentionedPeople.length; i++) {
+  for (let i = 1; i < source.mentionedPeople.length; i++) {
     // see if we actually need to delete them
     if (rooms[source.roomId].groups[group].people[source.mentionedPeople[i]] != null) {
       delete rooms[source.roomId].groups[group].people[source.mentionedPeople[i]];
@@ -238,7 +238,7 @@ actions.groupdel = function (source, input) {
 // Tag/Notify all members in the group
 // ------------------------------------------------
 actions.tag = function (source, input) {
-  var group = getGroupname(input);
+  let group = getGroupname(input);
 
   if (group == null) {
     invalidGroupname(source, input);
@@ -246,7 +246,7 @@ actions.tag = function (source, input) {
   }
 
   if (rooms[source.roomId].groups[group] == null) {
-    var message = {
+    let message = {
       roomId: source.roomId,
       text: "Could not find a group named '" + group + "' for this room."
     };
@@ -255,13 +255,13 @@ actions.tag = function (source, input) {
   }
 
   // tag everyone!
-  var message = {};
+  let message = {};
   message.roomId = source.roomId;
   message.markdown = "Hey you'in(s) ";
 
-  for (var property in rooms[source.roomId].groups[group].people) {
+  for (let property in rooms[source.roomId].groups[group].people) {
     if (rooms[source.roomId].groups[group].people.hasOwnProperty(property)) {
-      var person = rooms[source.roomId].groups[group].people[property];
+      let person = rooms[source.roomId].groups[group].people[property];
       message.markdown += "<@personId:" + person.id + "|" + person.displayName + "> ";
     }
   }
@@ -275,10 +275,10 @@ actions.tag = function (source, input) {
 // ------------------------------------------------
 actions.list = function (source, input) {
   // input will be null
-  var message = {};
+  let message = {};
   message.roomId = source.roomId;
   message.text = "Groups available in this room: ";
-  for (var property in rooms[source.roomId].groups) {
+  for (let property in rooms[source.roomId].groups) {
     if (rooms[source.roomId].groups.hasOwnProperty(property)) {
       message.text += property + " ";
     }
@@ -288,14 +288,14 @@ actions.list = function (source, input) {
 
 
 function invalidGroupname(source, groupname) {
-  var message = {}
+  let message = {}
   message.roomId = source.roomId;
   message.text = "Invalid group name: '" + groupname + "'. Must be alphanumeric.";
   spark.messages.create(message);
 }
 
 function getGroupname(input) {
-  var token = /^([a-zA-Z0-9]+)/.exec(input);
+  let token = /^([a-zA-Z0-9]+)/.exec(input);
   if (token == null || token[1] == null) {
     return null;
   }

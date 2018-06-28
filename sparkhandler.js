@@ -1,7 +1,7 @@
-var spark = require('ciscospark/env');
-var sparkController = require("./controllers/spark-controller.js");
+const spark = require('ciscospark/env');
+const sparkController = require("./controllers/spark-controller.js");
 
-var webhookId;
+let webhookId;
 
 // --------------- WEBHOOKS --------------
 spark.webhooks.create({
