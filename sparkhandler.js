@@ -32,8 +32,6 @@ module.exports.messages = function(body) {
     // let's make sure it wasn't a mesasge from groupbot
     if(message.personEmail === "groupbot@webex.bot") {
       // ignore messages from groupbot
-      console.log("Message from groupbot");
-      console.log(message);
       return;
     }
 
