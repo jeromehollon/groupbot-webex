@@ -45,14 +45,15 @@ actions.help = function (caller) {
 // --------------- Action: Unknown ----------------
 // If we don't understand the action
 // ------------------------------------------------
-actions.unknown = function (source) {
+actions.unknown = function (source, input) {
   // tell them I didn't understand
 
   let message = {};
   message.roomId = source.roomId;
-  message.text = "Sorry, I didn't understand '" + source.text + "'";
+  message.text = "Sorry, I didn't understand '" + input + "'";
   spark.messages.create(message);
-  console.log("WARN: Unknown command '" + source.text + "'");
+  console.log("WARN: Unknown command '" + input + "'");
+  console.log(source);
 };
 
 
