@@ -15,7 +15,7 @@ fs.readFile('./cache.db', (err, data) => {
 
 
 
-sparkController.addRomm = function (roomId) {
+actions.addRomm = function (roomId) {
   if(rooms[roomId] == null) {
     rooms[roomId] = { groups: {}};
   }
