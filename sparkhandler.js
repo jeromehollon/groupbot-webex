@@ -30,13 +30,13 @@ module.exports.messages = function(body) {
 
   spark.messages.get(body.data.id).then(function(message) {
     // let's make sure it wasn't a mesasge from groupbot
-    if(!message.text.match("Groupbot")) {
+    if(!message.text.match("/Groupbot/")) {
       // groupbot was never tagged, means a message from groupbot
       return;
     }
 
     // trim the message to just the stuff concerning groupbot
-    let input = message.text.replace(/.*?Groupbot/i);
+    let input = message.text.replace(/.*?Groupbot/i, "");
     let command = /^\s+([a-zA-Z0-9]+)/.exec(input);
     if(command != null && command[1] != null) {
       command = command[1];
