@@ -257,13 +257,17 @@ actions.tag = function (source, input) {
   // tag everyone!
   let message = {};
   message.roomId = source.roomId;
-  message.markdown = "Hey you'in(s) ";
+  message.markdown = "";
 
   for (let property in rooms[source.roomId].groups[group].people) {
     if (rooms[source.roomId].groups[group].people.hasOwnProperty(property)) {
       let person = rooms[source.roomId].groups[group].people[property];
       message.markdown += "<@personId:" + person.id + "|" + person.displayName + "> ";
     }
+  }
+
+  if(message.markdown === "") {
+    message.text = "Group '" + group + "' has no members.";
   }
 
   spark.messages.create(message);
