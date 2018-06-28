@@ -30,8 +30,10 @@ module.exports.messages = function(body) {
 
   spark.messages.get(body.data.id).then(function(message) {
     // let's make sure it wasn't a mesasge from groupbot
-    if(!message.text.match("/Groupbot/")) {
+    if(!message.text.match("/.*Groupbot.*/")) {
       // groupbot was never tagged, means a message from groupbot
+      console.log("Message from groupbot");
+      console.log(message);
       return;
     }
 
