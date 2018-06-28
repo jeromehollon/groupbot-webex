@@ -62,3 +62,7 @@ typings/
 
 # data
 cache.db
+
+
+#intellij
+.idea/
