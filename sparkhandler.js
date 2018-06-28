@@ -36,12 +36,12 @@ module.exports.messages = function(body) {
     }
 
     // trim the message to just the stuff concerning groupbot
-    let input = message.text.replace(/.*?Groupbot/i, "");
+    let input = message.text.replace(/.*?Groupbot/si, "");
     let command = /^\s+([a-zA-Z0-9]+)/.exec(input);
     if(command != null && command[1] != null) {
       command = command[1];
     }
-    let directive = /^\s+([a-zA-Z0-9]+)\s+(.*)$/.exec(input);
+    let directive = /^\s+([a-zA-Z0-9]+)\s+(.*)$/s.exec(input);
     if(directive != null && directive[2] != null) {
       directive = directive[2];
     }
