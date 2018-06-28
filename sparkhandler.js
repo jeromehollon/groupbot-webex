@@ -26,9 +26,7 @@ module.exports.messages = function(body) {
     return;
   }
 
-  if(rooms[body.data.roomId] == null) {
-    rooms[body.data.roomId] = { groups: {}};
-  }
+  sparkController.addRomm(body.data.roomId);
 
   spark.messages.get(body.data.id).then(function(message) {
     var parsed = /^\s*Groupbot\s([a-zA-Z0-9]*) (.*)$/.exec(message.text);

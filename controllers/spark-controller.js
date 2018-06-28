@@ -14,6 +14,14 @@ fs.readFile('./cache.db', (err, data) => {
 });
 
 
+
+sparkController.addRomm = function (roomId) {
+  if(rooms[roomId] == null) {
+    rooms[roomId] = { groups: {}};
+  }
+}
+
+
 actions.help = function (caller) {
   // Print help to the room I'm in
 
@@ -33,6 +41,10 @@ actions.help = function (caller) {
 
   spark.messages.create(message);
 };
+
+// --------------- Action: Unknown ----------------
+// If we don't understand the action
+// ------------------------------------------------
 actions.unknown = function (source) {
   // tell them I didn't understand
 
@@ -43,6 +55,10 @@ actions.unknown = function (source) {
   console.log("WARN: Unknown command '" + source.text + "'");
 };
 
+
+// --------------- Action: Create  ----------------
+// Create a new group
+// ------------------------------------------------
 actions.create = function (source, groupname) {
   // create a group
   var token = getGroupname(groupname);
@@ -72,6 +88,11 @@ actions.create = function (source, groupname) {
   save();
 };
 
+
+// --------------- Action: Delete  ----------------
+// Delete a group
+// ------------------------------------------------
+
 actions['delete'] = function (source, input) {
   var group = getGroupname(input);
 
@@ -92,6 +113,10 @@ actions['delete'] = function (source, input) {
   save();
 };
 
+
+// --------------- Action: Hello   ----------------
+// Syn/Ack
+// ------------------------------------------------
 actions.hello = function (source) {
   var message = {};
   message.roomId = source.roomId;
@@ -99,6 +124,10 @@ actions.hello = function (source) {
   spark.messages.create(message);
 };
 
+
+// --------------- Action: GroupAdd ----------------
+// Adds member(s) to a group
+// -------------------------------------------------
 actions.groupadd = function (source, input) {
   var group = getGroupname(input);
 
@@ -138,6 +167,10 @@ actions.groupadd = function (source, input) {
   }
 };
 
+
+// --------------- Action: GroupList ----------------
+// List membership of a group
+// --------------------------------------------------
 actions.grouplist = function (source, input) {
   var group = getGroupname(input);
 
@@ -169,6 +202,10 @@ actions.grouplist = function (source, input) {
   spark.messages.create(message);
 };
 
+
+// --------------- Action: GroupDel ----------------
+// Delete member(s) from a group
+// ------------------------------------------------
 actions.groupdel = function (source, input) {
   var group = getGroupname(input);
 
@@ -196,6 +233,10 @@ actions.groupdel = function (source, input) {
   save();
 };
 
+
+// --------------- Action: Tag     ----------------
+// Tag/Notify all members in the group
+// ------------------------------------------------
 actions.tag = function (source, input) {
   var group = getGroupname(input);
 
@@ -228,6 +269,10 @@ actions.tag = function (source, input) {
   spark.messages.create(message);
 };
 
+
+// --------------- Action: List    ----------------
+// List all groups
+// ------------------------------------------------
 actions.list = function (source, input) {
   // input will be null
   var message = {};
