@@ -235,7 +235,7 @@ actions.groupdel = function (source, input) {
   }
 
   
-  if(source.text.match(".*groupadd.* me( .*|$)") != null) {
+  if(source.text.match(".*groupdel.* me( .*|$)") != null) {
     // they're asking to add themselves to the list of people in the group
     if(source.mentionedPeople == null) {
       source.mentionedPeople = [];
