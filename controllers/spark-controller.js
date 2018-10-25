@@ -304,7 +304,7 @@ function getGroupname(input) {
   if (token == null || token[1] == null) {
     return null;
   }
-  return token[1]
+  return token[1].toLowerCase();
 }
 
 function save() {
