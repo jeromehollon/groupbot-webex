@@ -34,6 +34,7 @@ actions.help = function (caller) {
   message.markdown += "    groupadd <groupname> <person> ...\n";
   message.markdown += "       Note using \"me\" will add yourself to the group\n";
   message.markdown += "    groupdel <groupname> <person> ...\n";
+  message.markdown += "       Note using \"me\" will remove yourself to the group\n";
   message.markdown += "    grouplist <groupname>\n";
   message.markdown += "    delete <groupname>\n";
   message.markdown += "    list\n";
@@ -232,6 +233,15 @@ actions.groupdel = function (source, input) {
     spark.messages.create(message);
     return;
   }
+
+  
+  if(source.text.match(".*groupadd.* me( .*|$)") != null) {
+    // they're asking to add themselves to the list of people in the group
+    if(source.mentionedPeople == null) {
+      source.mentionedPeople = [];
+    }
+    source.mentionedPeople.push(source.personId);
+  } 
 
   // got a good request
   for (let i = 1; i < source.mentionedPeople.length; i++) {
