@@ -99,7 +99,7 @@ actions.create = function (source, groupname) {
 actions['delete'] = function (source, input) {
   let group = getGroupname(input);
 
-  if (token == null) {
+  if (group == null) {
     invalidGroupname(source, input);
     return;
   }
